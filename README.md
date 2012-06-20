@@ -1,4 +1,4 @@
 howtonode-mongodb-blog-chump
 ============================
 
-Tutorial nodejs based blod to learn nodejs + mongodb. Taken from http://howtonode.org/express-mongodb
+Tutorial nodejs based blog to learn nodejs + mongodb. Taken from [http://howtonode.org/express-mongodb]
