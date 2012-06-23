@@ -1,14 +1,7 @@
-
-/**
- * Module dependencies.
- */
-
-var express = require('express')
-  , routes = require('./routes');
+var express = require('express');
+var ArticleProvider = require('./articleprovider-memory').ArticleProvider;
 
 var app = module.exports = express.createServer();
-
-// Configuration
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -28,10 +21,32 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-// Routes
+var articleProvider= new ArticleProvider();
 
-app.get('/', routes.index);
-
-app.listen(3000, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+app.get('/', function(req, res){
+    articleProvider.findAll( function(error,docs){
+        res.render('index.jade', { locals: {
+            title: 'Blog',
+            articles:docs
+            }
+        });
+    })
 });
+
+app.get('/blog/new', function(req, res) {
+    res.render('blog_new.jade', { locals: {
+        title: 'New Post'
+    }
+    });
+});
+
+app.post('/blog/new', function(req, res){
+    articleProvider.save({
+        title: req.param('title'),
+        body: req.param('body')
+    }, function( error, docs) {
+        res.redirect('/')
+    });
+});
+
+app.listen(3000);
